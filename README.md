@@ -56,20 +56,70 @@ The token’s price is determined by a **linear bonding curve** based on the tot
 
 ---
 
-## 🛠️ Interacting with the Contract
+## 🧠 Interacting with the Dynamic Volume Token Smart Contract
 
-### 1️⃣ **Buy Tokens**
+This guide explains how to **interact with the Dynamic Volume Token** smart contract deployed on **Flow EVM Testnet**.
 
-Using [Remix](https://remix.ethereum.org/):
+> 📄 **Deployed Contract Address:**  
+> [`0x68AdA047f23B2C88e6ed4B66b0456E28F8724Ec0`](https://evm-testnet.flowscan.io/address/0x68AdA047f23B2C88e6ed4B66b0456E28F8724Ec0)
 
-1. Open Remix and connect to Flow EVM Testnet.  
-2. Load the contract ABI and set the deployed address.  
-3. Go to the `buy()` function.  
-4. Enter the ETH amount in the “Value” field (e.g. `0.01 ether`) and click **Transact**.
+> 🌐 **RPC URL:**  
+> `https://testnet.evm.nodes.onflow.org`
 
-Or with **Foundry** / `cast`:
+---
 
+## 🧰 Prerequisites
+
+Before interacting with the contract, make sure you have:
+
+- ✅ **Metamask** (or any EVM wallet) configured for **Flow EVM Testnet**  
+- ✅ Some **testnet ETH** — get it from [Flow EVM Faucet](https://faucet.flow.com/evm)  
+- ✅ (Optional) [Remix IDE](https://remix.ethereum.org/) or **Foundry** CLI (`cast` commands)
+
+---
+
+## 🪙 1. Buy Tokens
+
+You can purchase tokens by simply sending ETH to the contract using the `buy()` function.  
+The number of tokens minted depends on **current price** (based on total supply) and the amount of ETH you send.
+
+### ▶️ Using Remix
+
+1. Open [Remix](https://remix.ethereum.org/).  
+2. Connect to **Injected Provider** (MetaMask) → select Flow EVM Testnet.  
+3. In the **Deployed Contracts** panel, click **At Address** and paste:  
+4. Expand the contract → find `buy()`.  
+5. Enter an amount in the **Value** field (e.g. `0.01 ether`) → click **Transact**.
+
+⏳ You’ll receive tokens based on the bonding curve price at that moment.
+
+---
+
+## 💵 2. Sell Tokens
+
+If you own tokens, you can sell them back to the contract using the `sell(uint256 amount)` function.  
+You’ll receive ETH based on the **bonding curve payout**.
+
+### ▶️ Using Remix
+
+1. In the deployed contract panel, find the `sell(uint256)` function.  
+2. Enter the number of tokens you want to sell.  
+3. Click **Transact** and confirm the transaction.
+
+💰 Your tokens will be burned, and ETH will be sent to your wallet.
+
+---
+
+## 📊 3. Check Your Token Balance
+
+Use the `balanceOf(address)` function to check your wallet’s token balance.
+
+- Enter your address in the input box.  
+- Click **Call** (no gas needed — it's a view function).
+
+Example:
 ```bash
-cast send 0x68AdA047f23B2C88e6ed4B66b0456E28F8724Ec0 "buy()" \
-  --value 0.01ether \
-  --rpc-url https://testnet.evm.nodes.onflow.org
+cast call 0x68AdA047f23B2C88e6ed4B66b0456E28F8724Ec0 \
+"balanceOf(address)" 0xYourWalletAddress \
+--rpc-url https://testnet.evm.nodes.onflow.org
+
